@@ -37,9 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shop.apps.ShopConfig',
-    'django.contrib.humanize',
 
+    # local-app
+    'shop.apps.ShopConfig',
+    'cart.apps.CartConfig',
+    'accounts.apps.AccountsConfig',
+
+    # 3-app
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +134,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'accounts.User'
