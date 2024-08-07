@@ -31,15 +31,16 @@ class UserCreationForm(forms.ModelForm):
 
 class UserRegisterForm(forms.Form):
     email = forms.EmailField(label='ایمیل')
-    phone_number = forms.CharField(max_length=11, label='شماره موبایل')
     full_name = forms.CharField(max_length=11, label='نام')
+    phone_number = forms.CharField(max_length=11, label='شماره موبایل')
     password1 = forms.CharField(widget=forms.PasswordInput, label='پسورد')
     password2 = forms.CharField(widget=forms.PasswordInput, label='تایید پسورد')
 
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise ValidationError('این ایمیل از قبل موجود می باشد')
+            raise forms.ValidationError('این ایمیل از قبل موجود می باشد')
+        return email
 
     def clean_phone_number(self):
         phone = self.cleaned_data['phone_number']

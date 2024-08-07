@@ -1,13 +1,35 @@
+from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
 
-class Product(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=200)
-    price = models.DecimalField(max_digits=10, decimal_places=0)
-    description = models.TextField()
+    slug = models.SlugField(max_length=200, unique=True)
+    is_sub = models.BooleanField(default=False)
+    sub_categories = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='scategory')
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+        verbose_name = 'Category'
+        ordering= ('name',)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('shop:category_filter', args=[self.slug])
+
+
+class Product(models.Model):
+    category = models.ManyToManyField(Category, related_name='products')
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+    price = models.DecimalField(max_digits=12, decimal_places=0)
+    description = RichTextField()
     image = models.ImageField(upload_to='products/%Y/%m/%d')
+    available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -18,43 +40,4 @@ class Product(models.Model):
         ordering = ['created']
 
     def get_absolute_url(self):
-        return reverse('shop:product', kwargs=[self.id])
-
-
-class Order(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.customer
-
-
-class OrderItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    product_price = models.DecimalField(max_digits=10, decimal_places=0)
-    product_count = models.PositiveIntegerField(default=0)
-    product_cost = models.DecimalField(max_digits=10, decimal_places=0)
-
-    def __str__(self):
-        return self.product.name
-
-
-class Invoice(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-    invoice_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.invoice_date
-
-
-class Transaction(models.Model):
-    STATUS_CHOICE = [
-        ('pending', 'Pending'),
-        ('failed', 'Failed'),
-        ('completed', 'Completed'),
-    ]
-    invoice = models.ForeignKey(Invoice, models.SET_NULL, null=True)
-    transaction_date = models.DateTimeField(auto_now_add=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=0)
-    status = models.CharField(max_length=50)
+        return reverse('shop:product_detail', args=[self.slug])

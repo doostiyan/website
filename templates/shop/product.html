@@ -12,22 +12,19 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text">{{ product.description|safe }}</p>
                         {% if product.is_sale %}
                             <strike> 💰 قیمت : {{ product.price| intcomma }} تومان</strike> <br>
                             💰 قیمت :  {{ product.sale_price| intcomma }} تومان
                         {% else %}
                             💰 قیمت : {{ product.price| intcomma }} تومان
                         {% endif %}<br><br><br><br>
-                        <select class="form-select" aria-label="Default select example" id="cart-qty">
-                            <option selected>تعداد محصول را انتخاب کنید</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select><br><br>
-                        <button class="add-cart btn btn-secondary" data-product-id="{{ product.id }}">اضافه کردن به سبد
-                            خرید
-                        </button>
+                   
+                        <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                            {% csrf_token %}
+                            {{ form.as_table }}
+                            <input type="submit" value="اضافه کردن به سبد خرید">
+                        </form>
 
                         {#                        <botton class="btn btn-secondary" type="button" value="{{ product.id }}" id='add-cart'>اضافه کردن به سبد خرید</botton>#}
                         <a class="btn btn-primary" type="submit" href="{% url 'shop:home' %}">بازگشت به صفحه اصلی</a>

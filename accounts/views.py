@@ -27,12 +27,11 @@ class RegisterUserView(View):
             OtpCode.objects.create(phone_number=form.cleaned_data['phone_number'], code=random_code)
             request.session['user_registration_info'] = {
                 'email': form.cleaned_data['email'],
-                'phone_number': form.cleaned_data['phone_number'],
                 'full_name': form.cleaned_data['full_name'],
-                'password1': form.cleaned_data['password1'],
-
+                'phone_number': form.cleaned_data['phone_number'],
+                'password1': form.cleaned_data['password1']
             }
-            messages.success(request, '', 'success')
+            messages.success(request, 'کد تایید یه را به شماره موبایل شماارسال کردیم', 'success')
             return redirect('accounts:verify')
         return render(request, self.template_name, {'forms': form})
 
@@ -51,12 +50,13 @@ class VerifyUserView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             if form.cleaned_data['code'] == code_instance.code:
-                User.objects.create_user(user_session['email'], user_session['phone_number'], user_session['full_name'],
+                print(user_session)
+                User.objects.create_user(user_session['email'], user_session['full_name'], user_session['phone_number'],
                                          user_session['password1'])
-                messages.success(request, '', 'success')
+                messages.success(request, 'شما با موفقیت ثبت نام کردید', 'success')
                 return redirect('shop:home')
             else:
-                messages.error(request, '', 'error')
+                messages.error(request, 'کد وارد شده صحیح نمی باشد', 'danger')
                 return redirect('accounts:verify')
             return render(request, self.template_name, {'form': form})
 
@@ -81,14 +81,14 @@ class LoginUserView(View):
             user = authenticate(request, phone_number=cd['phone_number'], password=cd['password'])
             if user is not None:
                 login(request, user)
-                messages.success(request, '', 'success')
+                messages.success(request, 'شما با موفقیت وارد شدید', 'success')
                 return redirect('shop:home')
-            messages.error(request, '', 'error')
+            messages.error(request, 'اطلاعات وارد شده صحیح نمی باشد', 'danger')
             return render(request, self.template_name, {'form': form})
 
 
 class LogoutUserView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
-        messages.success(request, '', 'success')
+        messages.info(request, 'شما با موفقیت خارج شدید', 'info')
         return redirect('shop:home')

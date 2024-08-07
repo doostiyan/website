@@ -1,5 +1,8 @@
 from django.contrib import admin
 
+from shop.models import Product, Category
+
+
 # from shop.models import Product, Order, OrderItem, Transaction, Invoice
 #
 #
@@ -28,9 +31,12 @@ from django.contrib import admin
 
 
 # admin.site.register(Product, ProductAdmin)
-# admin.site.register(Order)
+admin.site.register(Category)
 # admin.site.register(OrderItem)
 # admin.site.register(Invoice)
 # admin.site.register(Transaction)
 
 
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    raw_id_fields = ('category',)
