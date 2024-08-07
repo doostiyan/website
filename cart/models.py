@@ -22,7 +22,7 @@ class Order(models.Model):  # سفارش
         ordering = ('paid', '-updated')
 
     def get_total_price(self):
-        total = sum(item.get_total() for item in self.items.all())
+        total = sum(item.get_cost() for item in self.items.all())
         if self.discount:
             discount_price = (self.discount / 100) * total
             total = int(total - discount_price)

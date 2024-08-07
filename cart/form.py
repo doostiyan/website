@@ -6,4 +6,4 @@ class CartAddForm(forms.Form):
 
 
 class CouponApplyForm(forms.Form):
-    coupon = forms.CharField()
+    code = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'کد تخفیف'}))

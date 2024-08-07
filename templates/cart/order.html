@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h3>Checkout</h3>
-    <p> Total {{ order.get_total_price }}</p>
-    <a href="{% url 'cart:order_pay' order.id %}" class="btn btn-primary">Pay</a>
+    <h3>پرداخت</h3>
+    <p> قیمت سفارش {{ order.get_total_price }}</p>
+    <a href="{% url 'cart:order_pay' order.id %}" class="btn btn-primary">پرداخت</a>
     <br><br>
     <form action="{% url 'cart:apply_coupon' order.id %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Apply">
+    <input type="submit" value="ثبت">
     </form>
 
 {% endblock %}

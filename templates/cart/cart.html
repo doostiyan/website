@@ -9,11 +9,11 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Quantity</th>
-      <th scope="col">Unit Price</th>
-      <th scope="col">Total Price</th>
-      <th scope="col">Remove</th>
+      <th scope="col">نام محصول</th>
+      <th scope="col">تعداد</th>
+      <th scope="col">قیمت</th>
+      <th scope="col">قیمت کل</th>
+      <th scope="col">حذف کردن</th>
     </tr>
   </thead>
   <tbody>
@@ -24,12 +24,12 @@
           <td>{{ item.quantity }}</td>
           <td>{{ item.price }}</td>
           <td>{{ item.total_price }}</td>
-          <td> <a href="{% url 'cart:cart_delete' item.product.id %}">remove</a> </td>
+          <td> <a href="{% url 'cart:cart_delete' item.product.id %}">حذف محصول</a> </td>
       </tr>
   {% endfor %}
   <tr>
 
-      <td>Total</td>
+      <td>قیمت کل سفارش</td>
       <td colspan="3"></td>
       <td>{{ cart.get_total_price }}</td>
   </tr>
