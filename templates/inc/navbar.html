@@ -16,19 +16,33 @@
                     <li class="nav-item"><a class="nav-link active" aria-current="page"
                                             href="{% url 'accounts:register' %}">ثبت نام</a></li>
                 {% endif %}
-                <li class="nav-item"><a class="nav-link" href="#!">در باره ما</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">All Products</a></li>
-                        <li>
-                            <hr class="dropdown-divider"/>
-                        </li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                    </ul>
-                </li>
+                {#                <li class="nav-item"><a class="nav-link" href="#!">در باره ما</a></li>#}
+                <!-- Center Section: Categories -->
+                <div class="d-flex align-items-center categories-container" style="direction: ltr; text-align: left;">
+                    {% for category in categories %}
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-danger text-white">
+                                <a href="{{ category.get_absolute_url }}"
+                                   class="text-white text-decoration-none">{{ category.name }}</a>
+                            </button>
+                            {% if category.scategory.all %}
+                                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% for sub in category.scategory.all %}
+                                        <li>
+                                            <a class="dropdown-item"
+                                               href="{{ sub.get_absolute_url }}">{{ sub.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
             </ul>
             <form class="d-flex">
                 <a class="btn btn-outline-dark" href="{% url 'cart:cart' %}">
